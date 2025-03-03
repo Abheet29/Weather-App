@@ -11,6 +11,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [theme, setTheme] = useState("light");
+  const [inputValue, setInputValue] = useState(city);  // Store the input value locally
 
   const getCityFromCoordinates = async (latitude, longitude) => {
     try {
@@ -94,12 +95,17 @@ function App() {
 
   // Debounced city input
   const debouncedFetchWeather = useCallback(
-    debounce(async (city) => {
-      setCity(city);  // Set city only when the user has typed something
-      fetchWeather(city);  // Fetch weather based on updated city
+    debounce((city) => {
+      setCity(city);
     }, 1000),
-    [fetchWeather]
+    []
   );
+
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+    setInputValue(value); // Update local state for the input
+    debouncedFetchWeather(value); // Trigger debounce function
+  };
 
   const toggleTheme = () => {
     setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
@@ -149,11 +155,8 @@ function App() {
             <input
               type="text"
               placeholder="Enter a city..."
-              value={city}
-              onChange={(e) => {
-                setCity(e.target.value);
-                debouncedFetchWeather(e.target.value);
-              }}
+              value={inputValue} // Use the local state for input value
+              onChange={handleInputChange} // Handle input change
               className="border p-3 rounded-lg w-full bg-transparent outline-none dark:border-gray-600 dark:text-dark text-lg font-medium"
             />
             <span className="absolute top-3 right-4 text-gray-400">🔍</span>
