@@ -17,21 +17,21 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      # Step 2: Set up Node.js
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
+      # Step 2: Set up pnpm
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v2
         with:
-          node-version: '16'  # Specify the version of Node.js to use
+          version: '7'  # Specify the pnpm version you want to use
 
-      # Step 3: Install dependencies
+      # Step 3: Install dependencies using pnpm
       - name: Install dependencies
         run: |
-          npm install
+          pnpm install
 
       # Step 4: Build the project
       - name: Build the project
         run: |
-          npm run build
+          pnpm run build
 
       # Step 5: Deploy to Netlify
       - name: Deploy to Netlify
